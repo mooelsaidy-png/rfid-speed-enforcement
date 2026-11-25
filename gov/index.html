@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Portal — RFID Speed Monitor</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <h1>🏛️ Government Portal</h1>
+            <div class="header-status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Ready</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="tabs">
+            <button class="tab-btn active" data-tab="zones">🗺️ Zones</button>
+            <button class="tab-btn" data-tab="search">🔍 Search by Tag / Plate</button>
+        </section>
+
+        <!-- ZONES TAB -->
+        <section class="tab-content active" id="tab-zones">
+            <div id="zonesView">
+                <div class="chart-card">
+                    <h2>Select a Zone</h2>
+                    <div id="zoneList" class="zone-grid"></div>
+                </div>
+            </div>
+
+            <div id="zoneDetail" style="display:none">
+                <div class="gantry-header">
+                    <div>
+                        <h2 id="zoneTitle">-</h2>
+                        <p class="muted" id="zoneSub">-</p>
+                    </div>
+                    <a href="#" class="btn-secondary" id="backToZones">← Back to zones</a>
+                </div>
+
+                <div class="controls">
+                    <div class="filter-group">
+                        <label>Source</label>
+                        <select id="sourceToggle">
+                            <option value="reported" selected>Reported to Government (default)</option>
+                            <option value="all">All Violations in Zone</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>UID</th>
+                                <th>Plate</th>
+                                <th>Speed</th>
+                                <th>Limit</th>
+                                <th>Over By</th>
+                                <th>Type</th>
+                                <th>Severity</th>
+                                <th>Direction</th>
+                                <th>Time</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="zoneViolationsBody">
+                            <tr><td colspan="11" class="empty">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="violationDetail" style="display:none">
+                <div class="gantry-header">
+                    <div><h2 id="detailTitle">Violation Detail</h2></div>
+                    <a href="#" class="btn-secondary" id="backToViolations">← Back</a>
+                </div>
+                <div id="detailCard" class="chart-card"></div>
+            </div>
+        </section>
+
+        <!-- SEARCH TAB -->
+        <section class="tab-content" id="tab-search">
+            <div class="controls">
+                <div class="filter-group">
+                    <label>Tag ID (exact)</label>
+                    <input type="text" id="tagInput" placeholder="E2801160600002055B4C7D3A">
+                </div>
+                <div class="filter-group">
+                    <label>OR Plate (partial)</label>
+                    <input type="text" id="plateInput" placeholder="ABC-1234">
+                </div>
+                <div class="toggle-group">
+                    <button id="searchBtn" class="btn-refresh">🔍 Search</button>
+                </div>
+            </div>
+            <div id="searchResult"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 RFID Speed Monitor &nbsp;|&nbsp;
+               <a href="../tech/">Tech</a> ·
+               <a href="../gov/">Gov</a> ·
+               <a href="../user/">User</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

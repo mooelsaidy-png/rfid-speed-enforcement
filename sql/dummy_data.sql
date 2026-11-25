@@ -1,0 +1,114 @@
+-- ============================================
+-- Dummy data for rfid_system (IDEMPOTENT)
+-- Safe to re-run: deletes in FK-safe order first.
+-- Counts: 8 tags, 4 zones, 4 devices, 30 readings, 14 violations, 8 gov reports
+-- ============================================
+
+USE rfid_system;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM `government_report`;
+DELETE FROM `violations`;
+DELETE FROM `live_readings`;
+DELETE FROM `edge_devices`;
+DELETE FROM `speed_zones`;
+DELETE FROM `tags`;
+ALTER TABLE `speed_zones` AUTO_INCREMENT = 1;
+ALTER TABLE `live_readings` AUTO_INCREMENT = 1;
+ALTER TABLE `violations` AUTO_INCREMENT = 1;
+ALTER TABLE `government_report` AUTO_INCREMENT = 1;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- 1) Tags (8 vehicles)
+INSERT INTO tags (tag_id, owner_name, vehicle_plate, vehicle_color, vehicle_type) VALUES
+('E2801160600002055B4C7D3A', 'Ahmed Mohamed',   'ABC-1234', 'White',  'Toyota Corolla'),
+('E2801160600002055B4C7D3B', 'Mahmoud Ali',     'DEF-5678', 'Black',  'Hyundai Elantra'),
+('E2801160600002055B4C7D3C', 'Sara Ibrahim',    'GHI-9012', 'Silver', 'Nissan Sunny'),
+('E2801160600002055B4C7D3D', 'Karim Hassan',    'JKL-3456', 'Red',    'Chevrolet Optra'),
+('E2801160600002055B4C7D3E', 'Mona Fathy',      'MNO-7890', 'Gray',   'Kia Cerato'),
+('E2801160600002055B4C7D3F', 'Omar Khaled',     'PQR-2345', 'Blue',   'VW Golf'),
+('E2801160600002055B4C7D40', 'Nourhan Sami',    'STU-6789', 'White',  'Renault Logan'),
+('E2801160600002055B4C7D41', 'Hossam Eldin',    'VWX-0123', 'Black',  'BMW 320i');
+
+-- 2) Speed Zones (4 zones)
+INSERT INTO speed_zones (zone_name, speed_limit) VALUES
+('University Street', 60.00),
+('Nile Bridge', 80.00),
+('Autostrad Road', 100.00),
+('Tahrir Square', 40.00);
+
+-- 3) Edge Devices (4 devices)
+INSERT INTO edge_devices (device_id, location_name, zone_id, edition, last_seen_at, last_heartbeat_batch, firmware_ver, buffer_backlog, is_online) VALUES
+('EDGE-001', 'Cairo University - North Gate', 1, 'A', NOW(3), 1523, '1.2.3', 0,  TRUE),
+('EDGE-002', 'Nile Bridge - Northbound',       2, 'A', NOW(3), 982,  '1.2.3', 2,  TRUE),
+('EDGE-003', 'Autostrad - KM 12',              3, 'B', NOW(3), 2104, '1.2.4', 0,  TRUE),
+('EDGE-004', 'Tahrir Square - Main Entrance',  4, 'A', NOW(3), 456,  '1.2.2', 15, FALSE);
+
+-- 4) Live Readings (30 readings)
+INSERT INTO live_readings (session_id, device_id, zone_id, tag_id, peak_rssi_1, peak_rssi_2, rssi, antenna_port, speed_kmh, time_diff_ms, direction, is_violation, diagnostic_tag, read_time, received_at) VALUES
+('a1b2c3d4-0001-4000-8000-000000000001', 'EDGE-001', 1, 'E2801160600002055B4C7D3A', -45, -52, -48, 1, 55.30, 390, 'North', FALSE, NULL,           NOW() - INTERVAL 5 MINUTE,  NOW() - INTERVAL 5 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000002', 'EDGE-001', 1, 'E2801160600002055B4C7D3B', -48, -50, -49, 1, 72.80, 296, 'North', TRUE,  NULL,           NOW() - INTERVAL 8 MINUTE,  NOW() - INTERVAL 8 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000003', 'EDGE-001', 1, 'E2801160600002055B4C7D3C', -52, -46, -49, 2, 48.20, 448, 'South', FALSE, NULL,           NOW() - INTERVAL 12 MINUTE, NOW() - INTERVAL 12 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000004', 'EDGE-002', 2, 'E2801160600002055B4C7D3D', -50, -48, -49, 1, 88.50, 244, 'North', TRUE,  NULL,           NOW() - INTERVAL 15 MINUTE, NOW() - INTERVAL 15 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000005', 'EDGE-002', 2, 'E2801160600002055B4C7D3E', -46, -44, -45, 1, 65.70, 328, 'North', FALSE, NULL,           NOW() - INTERVAL 20 MINUTE, NOW() - INTERVAL 20 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000006', 'EDGE-002', 2, 'E2801160600002055B4C7D3F', -55, -57, -56, 2, 95.30, 226, 'South', TRUE,  NULL,           NOW() - INTERVAL 25 MINUTE, NOW() - INTERVAL 25 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000007', 'EDGE-003', 3, 'E2801160600002055B4C7D40', -42, -45, -43, 1, 110.60, 195, 'North', TRUE, NULL,           NOW() - INTERVAL 30 MINUTE, NOW() - INTERVAL 30 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000008', 'EDGE-003', 3, 'E2801160600002055B4C7D41', -47, -49, -48, 1, 78.40, 275, 'North', FALSE, NULL,          NOW() - INTERVAL 35 MINUTE, NOW() - INTERVAL 35 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000009', 'EDGE-003', 3, 'E2801160600002055B4C7D3A', -51, -53, -52, 2, 92.10, 234, 'South', TRUE,  NULL,           NOW() - INTERVAL 40 MINUTE, NOW() - INTERVAL 40 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000010', 'EDGE-004', 4, 'E2801160600002055B4C7D3B', -49, -47, -48, 1, 35.90, 602, 'North', FALSE, 'Weak_Signal',  NOW() - INTERVAL 45 MINUTE, NOW() - INTERVAL 45 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000011', 'EDGE-004', 4, 'E2801160600002055B4C7D3C', -53, -55, -54, 2, 52.30, 413, 'South', TRUE,  NULL,           NOW() - INTERVAL 50 MINUTE, NOW() - INTERVAL 50 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000012', 'EDGE-001', 1, 'E2801160600002055B4C7D3D', -44, -42, -43, 1, 68.50, 315, 'North', TRUE,  NULL,           NOW() - INTERVAL 55 MINUTE, NOW() - INTERVAL 55 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000013', 'EDGE-001', 1, 'E2801160600002055B4C7D3E', -47, -50, -48, 1, 43.20, 500, 'South', FALSE, NULL,           NOW() - INTERVAL 1 HOUR,    NOW() - INTERVAL 1 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000014', 'EDGE-002', 2, 'E2801160600002055B4C7D3F', -50, -52, -51, 2, 75.90, 284, 'North', FALSE, NULL,           NOW() - INTERVAL 1 HOUR - INTERVAL 10 MINUTE, NOW() - INTERVAL 1 HOUR - INTERVAL 10 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000015', 'EDGE-002', 2, 'E2801160600002055B4C7D40', -46, -48, -47, 1, 83.60, 258, 'North', TRUE, NULL,           NOW() - INTERVAL 1 HOUR - INTERVAL 20 MINUTE, NOW() - INTERVAL 1 HOUR - INTERVAL 20 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000016', 'EDGE-003', 3, 'E2801160600002055B4C7D41', -43, -45, -44, 1, 105.20, 205, 'North', TRUE, NULL,           NOW() - INTERVAL 1 HOUR - INTERVAL 30 MINUTE, NOW() - INTERVAL 1 HOUR - INTERVAL 30 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000017', 'EDGE-003', 3, 'E2801160600002055B4C7D3A', -48, -50, -49, 1, 71.30, 302, 'South', FALSE, NULL,          NOW() - INTERVAL 2 HOUR,    NOW() - INTERVAL 2 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000018', 'EDGE-004', 4, 'E2801160600002055B4C7D3B', -54, -56, -55, 2, 38.70, 558, 'North', FALSE, 'Weak_Signal',  NOW() - INTERVAL 2 HOUR - INTERVAL 15 MINUTE, NOW() - INTERVAL 2 HOUR - INTERVAL 15 MINUTE),
+('a1b2c3d4-0001-4000-8000-000000000019', 'EDGE-001', 1, 'E2801160600002055B4C7D3C', -46, -44, -45, 1, 62.40, 346, 'North', TRUE,  NULL,           NOW() - INTERVAL 3 HOUR,    NOW() - INTERVAL 3 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000020', 'EDGE-002', 2, 'E2801160600002055B4C7D3D', -49, -51, -50, 2, 58.10, 371, 'South', FALSE, NULL,           NOW() - INTERVAL 4 HOUR,    NOW() - INTERVAL 4 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000021', 'EDGE-003', 3, 'E2801160600002055B4C7D3E', -45, -47, -46, 1, 89.70, 240, 'North', TRUE,  NULL,           NOW() - INTERVAL 5 HOUR,    NOW() - INTERVAL 5 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000022', 'EDGE-004', 4, 'E2801160600002055B4C7D3F', -52, -54, -53, 2, 41.50, 520, 'South', TRUE,  'Weak_Signal',  NOW() - INTERVAL 6 HOUR,    NOW() - INTERVAL 6 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000023', 'EDGE-001', 1, 'E2801160600002055B4C7D40', -47, -45, -46, 1, 57.80, 374, 'North', FALSE, NULL,           NOW() - INTERVAL 8 HOUR,    NOW() - INTERVAL 8 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000024', 'EDGE-002', 2, 'E2801160600002055B4C7D41', -50, -48, -49, 1, 79.20, 272, 'North', FALSE, NULL,           NOW() - INTERVAL 10 HOUR,   NOW() - INTERVAL 10 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000025', 'EDGE-003', 3, 'E2801160600002055B4C7D3A', -44, -46, -45, 1, 118.40, 182, 'South', TRUE,  NULL,           NOW() - INTERVAL 12 HOUR,   NOW() - INTERVAL 12 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000026', 'EDGE-004', 4, 'E2801160600002055B4C7D3B', -55, -53, -54, 2, 46.30, 466, 'North', FALSE, 'Weak_Signal',  NOW() - INTERVAL 18 HOUR,   NOW() - INTERVAL 18 HOUR),
+('a1b2c3d4-0001-4000-8000-000000000027', 'EDGE-001', 1, 'E2801160600002055B4C7D3C', -48, -46, -47, 1, 66.70, 324, 'North', TRUE,  NULL,           NOW() - INTERVAL 1 DAY,     NOW() - INTERVAL 1 DAY),
+('a1b2c3d4-0001-4000-8000-000000000028', 'EDGE-002', 2, 'E2801160600002055B4C7D3D', -51, -49, -50, 2, 61.90, 349, 'South', FALSE, NULL,           NOW() - INTERVAL 2 DAY,     NOW() - INTERVAL 2 DAY),
+('a1b2c3d4-0001-4000-8000-000000000029', 'EDGE-003', 3, 'E2801160600002055B4C7D3E', -46, -48, -47, 1, 97.30, 222, 'North', TRUE,  NULL,           NOW() - INTERVAL 3 DAY,     NOW() - INTERVAL 3 DAY),
+('a1b2c3d4-0001-4000-8000-000000000030', 'EDGE-004', 4, 'E2801160600002055B4C7D3F', -53, -55, -54, 2, 39.80, 543, 'South', FALSE, 'Weak_Signal',  NOW() - INTERVAL 5 DAY,     NOW() - INTERVAL 5 DAY);
+
+-- 5) Violations (14 records)
+INSERT INTO violations (violation_uid, session_id, tag_id, vehicle_plate, zone_id, speed_kmh, speed_limit, over_by_kmh, direction, violation_type, severity, device_id, detected_at, transmitted_at, sync_status) VALUES
+('VIO-2026-0001', 'a1b2c3d4-0001-4000-8000-000000000002', 'E2801160600002055B4C7D3B', 'DEF-5678', 1, 72.80, 60.00, 12.80, 'North', 'Speeding',       'Medium', 'EDGE-001', NOW() - INTERVAL 8 MINUTE,  NOW() - INTERVAL 8 MINUTE,  'received'),
+('VIO-2026-0002', 'a1b2c3d4-0001-4000-8000-000000000004', 'E2801160600002055B4C7D3D', 'JKL-3456', 2, 88.50, 80.00, 8.50,  'North', 'Speeding',       'Low',    'EDGE-002', NOW() - INTERVAL 15 MINUTE, NOW() - INTERVAL 15 MINUTE, 'received'),
+('VIO-2026-0003', 'a1b2c3d4-0001-4000-8000-000000000006', 'E2801160600002055B4C7D3F', 'PQR-2345', 2, 95.30, 80.00, 15.30, 'South', 'Speeding',       'Medium', 'EDGE-002', NOW() - INTERVAL 25 MINUTE, NOW() - INTERVAL 25 MINUTE, 'received'),
+('VIO-2026-0004', 'a1b2c3d4-0001-4000-8000-000000000007', 'E2801160600002055B4C7D40', 'STU-6789', 3, 110.60, 100.00, 10.60,'North', 'Speeding',       'High',   'EDGE-003', NOW() - INTERVAL 30 MINUTE, NOW() - INTERVAL 30 MINUTE, 'sent'),
+('VIO-2026-0005', 'a1b2c3d4-0001-4000-8000-000000000009', 'E2801160600002055B4C7D3A', 'ABC-1234', 3, 92.10, 100.00, -7.90,'South', 'Wrong_Way',      'High',   'EDGE-003', NOW() - INTERVAL 40 MINUTE, NOW() - INTERVAL 40 MINUTE, 'sent'),
+('VIO-2026-0006', 'a1b2c3d4-0001-4000-8000-000000000011', 'E2801160600002055B4C7D3C', 'GHI-9012', 4, 52.30, 40.00, 12.30, 'South', 'Speeding',       'Medium', 'EDGE-004', NOW() - INTERVAL 50 MINUTE, NOW() - INTERVAL 50 MINUTE, 'received'),
+('VIO-2026-0007', 'a1b2c3d4-0001-4000-8000-000000000012', 'E2801160600002055B4C7D3D', 'JKL-3456', 1, 68.50, 60.00, 8.50,  'North', 'Speeding',       'Low',    'EDGE-001', NOW() - INTERVAL 55 MINUTE, NOW() - INTERVAL 55 MINUTE, 'received'),
+('VIO-2026-0008', 'a1b2c3d4-0001-4000-8000-000000000015', 'E2801160600002055B4C7D40', 'STU-6789', 2, 83.60, 80.00, 3.60,  'North', 'Speeding',       'Low',    'EDGE-002', NOW() - INTERVAL 1 HOUR - INTERVAL 20 MINUTE, NOW() - INTERVAL 1 HOUR - INTERVAL 20 MINUTE, 'received'),
+('VIO-2026-0009', 'a1b2c3d4-0001-4000-8000-000000000016', 'E2801160600002055B4C7D41', 'VWX-0123', 3, 105.20, 100.00, 5.20,'North', 'Speeding',       'Low',    'EDGE-003', NOW() - INTERVAL 1 HOUR - INTERVAL 30 MINUTE, NOW() - INTERVAL 1 HOUR - INTERVAL 30 MINUTE, 'received'),
+('VIO-2026-0010', 'a1b2c3d4-0001-4000-8000-000000000019', 'E2801160600002055B4C7D3C', 'GHI-9012', 1, 62.40, 60.00, 2.40,  'North', 'Speeding',       'Low',    'EDGE-001', NOW() - INTERVAL 3 HOUR,    NOW() - INTERVAL 3 HOUR,    'received'),
+('VIO-2026-0011', 'a1b2c3d4-0001-4000-8000-000000000021', 'E2801160600002055B4C7D3E', 'MNO-7890', 3, 89.70, 100.00, -10.30,'North','Wrong_Way',      'High',   'EDGE-003', NOW() - INTERVAL 5 HOUR,    NOW() - INTERVAL 5 HOUR,    'sent'),
+('VIO-2026-0012', 'a1b2c3d4-0001-4000-8000-000000000025', 'E2801160600002055B4C7D3A', 'ABC-1234', 3, 118.40, 100.00, 18.40,'South','Speeding',       'High',   'EDGE-003', NOW() - INTERVAL 12 HOUR,   NOW() - INTERVAL 12 HOUR,   'sent'),
+('VIO-2026-0013', 'a1b2c3d4-0001-4000-8000-000000000027', 'E2801160600002055B4C7D3C', 'GHI-9012', 1, 66.70, 60.00, 6.70,  'North', 'Speeding',       'Low',    'EDGE-001', NOW() - INTERVAL 1 DAY,     NOW() - INTERVAL 1 DAY,     'received'),
+('VIO-2026-0014', 'a1b2c3d4-0001-4000-8000-000000000029', 'E2801160600002055B4C7D3E', 'MNO-7890', 3, 97.30, 100.00, -2.70, 'North', 'Wrong_Way',      'Medium', 'EDGE-003', NOW() - INTERVAL 3 DAY,     NOW() - INTERVAL 3 DAY,     'received');
+
+-- 6) Government Reports (8 records: original 4 + 4 new, one per missing zone)
+INSERT INTO government_report (violation_id, violation_uid, tag_id, speed_kmh, violation_type, reported_at, ack_reference) VALUES
+(4, 'VIO-2026-0004', 'E2801160600002055B4C7D40', 110.60, 'Speeding',  NOW() - INTERVAL 25 MINUTE, 'GOV-ACK-2026-0001'),
+(5, 'VIO-2026-0005', 'E2801160600002055B4C7D3A', 92.10,  'Wrong_Way', NOW() - INTERVAL 35 MINUTE, 'GOV-ACK-2026-0002'),
+(11,'VIO-2026-0011', 'E2801160600002055B4C7D3E', 89.70,  'Wrong_Way', NOW() - INTERVAL 4 HOUR,    'GOV-ACK-2026-0003'),
+(12,'VIO-2026-0012', 'E2801160600002055B4C7D3A', 118.40, 'Speeding',  NOW() - INTERVAL 11 HOUR,   'GOV-ACK-2026-0004'),
+(1, 'VIO-2026-0001', 'E2801160600002055B4C7D3B', 72.80,  'Speeding',  NOW() - INTERVAL 7 MINUTE,  'GOV-ACK-2026-0005'),
+(2, 'VIO-2026-0002', 'E2801160600002055B4C7D3D', 88.50,  'Speeding',  NOW() - INTERVAL 14 MINUTE, 'GOV-ACK-2026-0006'),
+(6, 'VIO-2026-0006', 'E2801160600002055B4C7D3C', 52.30,  'Speeding',  NOW() - INTERVAL 48 MINUTE, 'GOV-ACK-2026-0007'),
+(3, 'VIO-2026-0003', 'E2801160600002055B4C7D3F', 95.30,  'Speeding',  NOW() - INTERVAL 24 MINUTE, 'GOV-ACK-2026-0008');
+
+-- Verify (expected: 8, 4, 4, 30, 14, 8)
+SELECT COUNT(*) AS tags_count              FROM tags;
+SELECT COUNT(*) AS zones_count             FROM speed_zones;
+SELECT COUNT(*) AS devices_count           FROM edge_devices;
+SELECT COUNT(*) AS readings_count          FROM live_readings;
+SELECT COUNT(*) AS violations_count        FROM violations;
+SELECT COUNT(*) AS government_reports_count FROM government_report;

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Dashboard — RFID Speed Monitor</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <h1>🛠️ Technical Dashboard</h1>
+            <div class="header-status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Connecting...</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Gantry picker (shown when no ?device=) -->
+        <section id="pickerView" class="picker-view" style="display:none">
+            <div class="chart-card">
+                <h2>📍 Select a Gantry</h2>
+                <p class="muted">Choose an edge device to open its dashboard.</p>
+                <div id="deviceList" class="device-list"></div>
+            </div>
+        </section>
+
+        <!-- Per-gantry dashboard -->
+        <section id="dashboardView" style="display:none">
+            <div class="gantry-header">
+                <div>
+                    <h2 id="gantryTitle">-</h2>
+                    <p class="muted" id="gantrySub">-</p>
+                </div>
+                <a class="btn-secondary" href="index.html">← Change gantry</a>
+            </div>
+
+            <section class="stats-grid" id="deviceStats">
+                <!-- filled by JS -->
+            </section>
+
+            <section class="chart-card">
+                <h3>📡 Live Readings <span class="muted" style="font-weight:400;font-size:.8rem">(auto-refresh 5s)</span></h3>
+                <div class="table-wrapper" style="box-shadow:none;border:none">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tag ID</th>
+                                <th>Owner</th>
+                                <th>Plate</th>
+                                <th>Vehicle</th>
+                                <th>Speed</th>
+                                <th>Limit</th>
+                                <th>Direction</th>
+                                <th>RSSI 1</th>
+                                <th>RSSI 2</th>
+                                <th>Port</th>
+                                <th>Diag</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="readingsBody">
+                            <tr><td colspan="13" class="empty">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 RFID Speed Monitor &nbsp;|&nbsp;
+               <a href="../tech/">Tech</a> ·
+               <a href="../gov/">Gov</a> ·
+               <a href="../user/">User</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

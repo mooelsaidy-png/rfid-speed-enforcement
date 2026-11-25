@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard — RFID Speed Monitor</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <h1>🚗 My Speed Monitor</h1>
+            <a href="logout.php" class="btn-secondary">Logout</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="profileSection">
+            <div id="profileCard" class="chart-card" style="margin-top:24px"></div>
+            <div id="summaryGrid" class="stats-grid"></div>
+        </section>
+
+        <section class="chart-card">
+            <h3>⚠️ My Violations</h3>
+            <div class="table-wrapper" style="box-shadow:none;border:none">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>UID</th>
+                            <th>Zone</th>
+                            <th>Zone Limit</th>
+                            <th>Snapshot Limit</th>
+                            <th>My Speed</th>
+                            <th>Over By</th>
+                            <th>Type</th>
+                            <th>Severity</th>
+                            <th>Direction</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="violationsBody">
+                        <tr><td colspan="11" class="empty">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 RFID Speed Monitor &nbsp;|&nbsp;
+               <a href="../tech/">Tech</a> ·
+               <a href="../gov/">Gov</a> ·
+               <a href="../user/">User</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/dashboard.js"></script>
+</body>
+</html>

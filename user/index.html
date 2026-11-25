@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — RFID Speed Monitor</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <h1>🚗 My Speed Monitor</h1>
+        </div>
+    </header>
+
+    <main class="container" style="max-width:480px">
+        <div class="chart-card" style="margin-top:48px">
+            <h2 style="margin-bottom:8px">Login</h2>
+            <p class="muted" style="margin-bottom:20px">
+                Use your <strong>owner name</strong> or <strong>vehicle plate</strong> as identifier,
+                and your <strong>tag ID</strong> as password.
+            </p>
+            <div class="filter-group" style="margin-bottom:14px">
+                <label>Owner Name or Plate</label>
+                <input type="text" id="identifier" placeholder="e.g. Ahmed Mohamed  or  ABC-1234" autocomplete="username">
+            </div>
+            <div class="filter-group" style="margin-bottom:20px">
+                <label>Password (Tag ID)</label>
+                <input type="password" id="password" placeholder="E2801160600002055B4C7D3A" autocomplete="current-password">
+            </div>
+            <button id="loginBtn" class="btn-refresh" style="width:100%">Login</button>
+            <p id="loginError" class="empty" style="display:none;margin-top:14px"></p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2026 RFID Speed Monitor &nbsp;|&nbsp;
+               <a href="../tech/">Tech</a> ·
+               <a href="../gov/">Gov</a> ·
+               <a href="../user/">User</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
