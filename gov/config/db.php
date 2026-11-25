@@ -1,8 +1,8 @@
 <?php
-$host     = 'localhost';
-$dbname   = 'rfid_system';
-$username = 'root';
-$password = '';
+$host     = 'sql7.freesqldatabase.com';
+$dbname   = 'sql7841489';
+$username = 'sql7841489';
+$password = 'Peg9qAZRYe';
 
 try {
     $pdo = new PDO(
